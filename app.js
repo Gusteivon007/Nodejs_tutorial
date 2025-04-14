@@ -4,18 +4,34 @@ const app = express();
 
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-    res.render("index")
-//  res.send("Alô SESI Sumaré!");
-})
+const sqlite3 = require("sqlite3");
 
+app.get("/index", (req, res) => {
+    res.render("pages/index");
+    console.log("GET / index");
+});
+
+//Exercício, criar uma rota para a página Sobre
 app.get("/sobre", (req, res) => {
-    // res.send("Voçê chegou a página!");
-    res.render("Sobre")
-   })
-   // res.send(Voçê chegou a página Sobre)
+    res.render("pages/sobre");
+    console.log("GET / sobre");
+});
 
-// Exercicio, criar uma rota para a página sobre 
-app.listen(3000, () => {
-    console.log(`Servidor Nodejs ativo na porta 3000`);
-})
+app.get("/cadastro", (req, res) => {
+    res.render("pages/cadastro");
+    console.log("GET / cadastro");
+});
+
+app.get("/login", (req, res) => {
+    res.render("pages/login");
+    console.log("GET / login");
+});
+
+app.get("/dashboard", (req, res) => {
+    res.render("pages/dashboard");
+    console.log("GET / dashboard");
+});
+
+app.listen(4000, () => {
+    console.log(`Servidor NODEjs ativo na porta 4000`);
+});
