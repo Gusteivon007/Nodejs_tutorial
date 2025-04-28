@@ -24,7 +24,7 @@ app.get("/cadastro", (req, res) => {
 
 app.get("/login", (req, res) => {
     res.render("pages/login");
-    console.log("GET / login");
+    console.log("GET / login");''
 });
 
 app.get("/dashboard", (req, res) => {
