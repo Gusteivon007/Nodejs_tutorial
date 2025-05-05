@@ -6,6 +6,16 @@
 <body>
     <%- include ("../partials/menu") %> 
   seja bem vindo a pagina de cadastro
+  <main>
+    <br> <br>
+    <form action="/login" method="post" class="formItens">
+        <label for="username">Seu nome</label>
+        <input type="text" name="username" id="username">
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="senha">
+        <button type="submit">Entrar</button>
+    </form>
+</main>
     <%- include ("../partials/footer") %> 
 </body>
 
