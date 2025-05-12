@@ -4,19 +4,20 @@
 <%- include("../partials/head")%>
 
 <body>
-    <%- include("../partials/menu")%>
-    Você está na pagina LOGIN
-    <a href="/"> voltar para a página inicial</a>
-<main>
+  <%- include("../partials/menu")%>
+  Você está na pagina LOGIN
+  <a href="/"> voltar para a página inicial</a>
+  <main>
     <br> <br>
     <form action="/login" method="post" class="formItens">
-        <label for="username">Seu nome</label>
-        <input type="text" name="username" id="username">
-        <label for="password">Senha</label>
-        <input type="password" name="password" id="senha">
-        <button type="submit">Entrar</button>
+      <label for="username">Seu nome</label>
+      <input type="text" name="username" id="username">
+      <label for="password">Senha</label>
+      <input type="password" name="password" id="senha">
+      <button type="submit">Entrar</button>
     </form>
-</main>
-<%- include("../partials/footer")%>
+  </main>
+  <%- include("../partials/footer")%>
 </body>
+
 </html>

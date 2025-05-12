@@ -1,3 +1,4 @@
+<%- console.log("USERTABLE:", JSON.stringify(dados)) %>
 <table>
   <thead>
     <tr>
@@ -8,12 +9,18 @@
   </thead>
 
   <tbody>
-    <% for(let i=0; i<100; i++ ){%>
+    <% let i; for (=0; i<10; i++ ){%>
     <tr>
-      <th> ID</th>
-      <th>Username</th>
-      <th>Senha</th>
+        <th><%=dados[i].id%></th>
+        <th><%=dados[i].username%></th>
+        <th><%=dados[i].password%></th>
     </tr>
     <% } %>
-  </tbody>
+    </tfoot>
+    <tr>
+      <td colspan="3">
+        <%- `Qtde de registros ${i}` %>
+      </td>
+    </tr>
+  <tfoot>
 </table>

@@ -16,6 +16,13 @@ db.serialize(() => {
     )
 })
 
+app.use(
+    session({
+        secret: "senhaforteparacriptografarsession",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
 
 app.use('/static', express.static(__dirname + '/static'));
 
@@ -28,22 +35,22 @@ app.set('view engine', 'ejs');
 app.get("/", (req, res) => {
     console.log("GET /")
     //res.send("Neymar no Santos Futebol clube <br> <img src='./static/neymarsantos.webp' width='700px'/>");
-    res.render("pages/index", {titulo: "index"});
+    res.render("pages/index", { titulo: "index" });
 });
 
 app.get("/sobre", (req, res) => {
     console.log("GET /sobre")
     // res.send("Você está na pagina SOBRE.")
-    res.render("pages/sobre" , {titulo: "sobre"});
+    res.render("pages/sobre", { titulo: "sobre" });
 })
 app.get("/dashboard", (req, res) => {
     console.log("GET /dashboard")
-    res.render("pages/dashboard" , {titulo: "dashboard"});
+    res.render("pages/dashboard", { titulo: "dashboard" });
 })
 
 app.get("/login", (req, res) => {
     console.log("GET /login")
-    res.render("pages/login" , {titulo: "login"})
+    res.render("pages/login", { titulo: "login" })
 });
 
 // /login para processamento dos dados do formulário de LOGIN no cliente
@@ -60,6 +67,8 @@ app.post("/login", (req, res) => {
         if (err) throw err;
         console.log(JSON.stringify(row))
         if (row) {
+            req.session.username = username;
+            req.session.loggedin = true;
             res.redirect("/dashboard");
         } else {
             res.send("Usuário Inválido");
@@ -108,7 +117,23 @@ app.post("/cadastro", (req, res) => {
         }
     })
 })
+//
+app.get("/dashboad", (req, res) => {
+    console.log("GET/dashboard")
 
+    if (req.session.loggedin) {
+        // Listar todos os usuarios
+        const query = "SELECT * FROM users";
+        db.get(query, [], (err, row) => {
+            if (err) throw err;
+            console.log
+            // Renderiza a pagina dashboard com a lista de usuarios coletada do BD pelo SELECT
+            res.render("pages/dashboard", { titulo: "tabela de usuario", dados: row });
+        });
+    } else {
+        res.send("Usuário não logado");
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Servidor sendo executado na porta ${PORT}`);
