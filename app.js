@@ -28,23 +28,22 @@ app.set('view engine', 'ejs');
 app.get("/", (req, res) => {
     console.log("GET /")
     //res.send("Neymar no Santos Futebol clube <br> <img src='./static/neymarsantos.webp' width='700px'/>");
-    res.render("pages/index");
+    res.render("pages/index", {titulo: "index"});
 });
 
 app.get("/sobre", (req, res) => {
     console.log("GET /sobre")
     // res.send("Você está na pagina SOBRE.")
-    res.render("pages/sobre");
-});
-
+    res.render("pages/sobre" , {titulo: "sobre"});
+})
 app.get("/dashboard", (req, res) => {
     console.log("GET /dashboard")
-    res.render("pages/dashboard")
-});
+    res.render("pages/dashboard" , {titulo: "dashboard"});
+})
 
 app.get("/login", (req, res) => {
     console.log("GET /login")
-    res.render("pages/login")
+    res.render("pages/login" , {titulo: "login"})
 });
 
 // /login para processamento dos dados do formulário de LOGIN no cliente
