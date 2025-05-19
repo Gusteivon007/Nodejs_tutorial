@@ -1,23 +1,31 @@
 <!DOCTYPE html>
-<html lang="ptbr">
+<html lang="en">
 
-<%- include("../partials/head")%>
+<%- include("../partials/head") %>
+<%- include ("../partials/menu") %>
+
 
 <body>
-  <%- include("../partials/menu")%>
-  Você está na pagina LOGIN
-  <a href="/"> voltar para a página inicial</a>
-  <main>
-    <br> <br>
-    <form action="/login" method="post" class="formItens">
-      <label for="username">Seu nome</label>
-      <input type="text" name="username" id="username">
-      <label for="password">Senha</label>
-      <input type="password" name="password" id="senha">
-      <button type="submit">Entrar</button>
+  <center>
+    Login
+    <br>
+    <form action="login" method="post">
+      Usuário:
+      <input type="text" id="username" name="username"> <br><br>
+      Senha:
+      <input type="text" id="senha" name="password">
+      <br><br>
+      <button type="submit">Login</button>
     </form>
-  </main>
-  <%- include("../partials/footer")%>
+
+    </form> <br>
+
+
+
+    <a href="cadastro"> Não tenho cadastro</a><br>
+    <%- include ("../partials/footer") %>
+  </center>
+
 </body>
 
 </html>

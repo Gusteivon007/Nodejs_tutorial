@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include ("../partials/head") %>
+<%- include("../partials/head") %>
+<%- include ("../partials/menu") %>
+
+<main><%- include ("../partials/usertable") %></main>
 
 <body>
-  <%- include ("../partials/menu") %>
-  </main>
-  <%- include ("../partials/footer") %>
-  </main>
-</body>
+  <center>
+    Será o violão mais tecnologico do mundo?
+    <br><br>
+    <img src='/static/laava_me.jpg' width="720" height="480" />
+    <br><br>
+    <a href="/"> Ir para a página inicial</a>
 
-</html>
+    <%- include ("../partials/footer") %>
+  </center>

@@ -1,0 +1,20 @@
+nav {
+  padding: 0 40px;
+  /* 0 em cima/baixo, 20px nas laterais */
+}
+
+header {
+  background-color: #42b8eb;
+  color: #b2e109;
+  padding: 30px 30px;
+  justify-content: space-between;
+  color: rgb(15, 2, 2);
+}
+
+body{
+  color:#ffffff;
+  font-family: Impact, fantasy;
+  background-color: rgb(32, 31, 31);
+  
+
+}

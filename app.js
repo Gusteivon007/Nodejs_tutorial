@@ -1,143 +1,168 @@
 const express = require("express");
 const session = require("express-session");
 const sqlite3 = require("sqlite3");
-//const bodyparser = require("body-parser"); // Versão do express <= 4
 
-const app = express();
+const app = express(); // Armazena as chamadas e propriedades da biblioteca EXPRESS
 
-const PORT = 3000;
+const PORT = 3000; // Configura o TCP
 
-//Conexão com o banco de dados
 const db = new sqlite3.Database("user.db");
 
 db.serialize(() => {
-    db.run(
-        "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
-    );
+  db.run(
+    "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
+  );
 });
 
 app.use(
-    session({
-        secret: "senhaforte",
-        resave: true,
-        saveUninitialized: true,
-    })
+  session({
+    secret: "senhaforte",
+    resave: true,
+    saveUninitialized: true,
+  })
 );
 
 app.use("/static", express.static(__dirname + "/static"));
 
-// Configuração do express para processar requisições POST com BODY PARAMETERS
-//app.use(bodyparser.urlencoded({extended: true})); // Versão <= 4.x.x
-app.use(express.urlencoded({ extended: true })); // Versão Express >= 5.x.x
-
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
-    console.log("GET /");
-    //res.send("Neymar no Santos Futebol clube <br> <img src='./static/neymarsantos.webp' width='700px'/>");
-    res.render("pages/index", { titulo: "index", req: req });
-});
-
-app.get("/sobre", (req, res) => {
-    console.log("GET /sobre");
-    // res.send("Você está na pagina SOBRE.")
-    res.render("pages/sobre", { titulo: "sobre", req: req });
-});
-app.get("/dashboard", (req, res) => {
-    console.log("GET /dashboard");
-    res.render("pages/dashboard", { titulo: "dashboard", req: req });
-});
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/login", (req, res) => {
-    console.log("GET /login");
-    res.render("pages/login", { titulo: "login", req: req });
-});
-
-// /login para processamento dos dados do formulário de LOGIN no cliente
-app.post("/login", (req, res) => {
-    console.log("POST /login");
-    console.log(JSON.stringify(req.body));
-    //res.render("pages/login")
-    const { username, password } = req.body;
-
-    // 1. Verificar se o usuário existe
-
-    const query = "SELECT * FROM users WHERE username=? AND password=?";
-    db.get(query, [username, password], (err, row) => {
-        if (err) throw err;
-        console.log(JSON.stringify(row));
-        if (row) {
-            req.session.username = username;
-            req.session.loggedin = true;
-            res.redirect("/dashboard");
-        } else {
-            res.send("Usuário Inválido");
-        }
-    });
-
-    // 2. Se o usuário existir e a senha é válida no BD, executar processo de login
-    console.log(`Usuário: ${username} já cadastrado.`);
-    res.send("Usuário já cadastrado");
-
-    // 3. Se não, executar processo de negação de login
+  res.render("pages/login", { titulo: "Login", req: req });
+  console.log("GET /");
 });
 
 app.get("/cadastro", (req, res) => {
-    console.log("GET /cadastro");
-    res.render("pages/cadastro");
+  res.render("pages/cadastro", { titulo: "Cadastro", req: req });
+  console.log("GET /cadastro");
 });
 
-// CADASTRO
-app.post("/cadastro", (req, res) => {
-    console.log("POST /cadastro");
-    console.log(JSON.stringify(req.body));
-    const { username, password } = req.body;
+// app.post()
 
-    const query = "SELECT * FROM users WHERE username=?";
+app.get("/", (req, res) => {
+  console.log("GET /index");
+  res.render("pages/index", { titulo: "Index", req: req });
+});
 
-    db.get(query, [username], (err, row) => {
-        if (err) throw err;
+app.get("/sobre", (req, res) => {
+  res.render("pages/sobre", { titulo: "Sobre", req: req });
+  console.log("GET /sobre");
+});
 
-        // 1. Verificar se o usuário já existe
-        console.log("Query SELECT do cadastro:", JSON.stringify(row));
-        if (row) {
-            // 2. Se o usuário existir avisa o usuário que não é possível realizar o cadastro
-            console.log(`Usuário: ${username} já cadastrado.`);
-            res.send("Usuário já cadastrado");
-        } else {
-            // 3. Se não existir, executar processo de cadastro de usuário
-            const insert = "INSERT INTO users (username, password) VALUES (?,?)";
-            db.get(insert, [username, password], (err, row) => {
-                if (err) throw err;
+app.get("/usuario_invalido", (req, res) => {
+  res.render("pages/usuario_invalido", { titulo: "usuario_invalido", req: req });
+  console.log("GET /usuario_invalido");
+});
 
-                console.log(`Usuário: ${username} cadastrado com sucesso.`);
-                res.redirect("/login"); // Redireciona para a página de login caso o registro tenha sucesso
-            });
-        }
+app.get("/sucesso", (req, res) => {
+  res.render("pages/sucesso", { titulo: "sucesso", req: req });
+  console.log("GET /sucesso");
+});
+
+app.get("/cadastro_existente", (req, res) => {
+  res.render("pages/cadastro_existente", { titulo: "cadastro_existente", req: req });
+  console.log("GET /cadastro_existente");
+});
+
+app.get("/nao_autorizado", (req, res) => {
+  res.render("pages/nao_autorizado", { titulo: "nao_autorizado", req: req });
+  console.log("GET /nao_autorizado");
+});
+
+app.get("/dashboard", (req, res) => {
+  if (req.session.loggedin) {
+    //listar todos os usuários
+    const query = "SELECT * FROM users";
+    db.all(query, [], (err, row) => {
+      if (err) throw err;
+      console.log(JSON.stringify(row));
+
+      res.render("pages/dashboard", {
+        titulo: "Tabela de usuário",
+        dados: row,
+        req: req,
+      });
     });
-});
-//
-app.get("/dashboad", (req, res) => {
-    console.log("GET/dashboard");
+  } else {
+    res.redirect("/nao_autorizado");
+  }
 
-    if (req.session.loggedin) {
-        // Listar todos os usuarios
-        const query = "SELECT * FROM users";
-        db.get(query, [], (err, row) => {
-            if (err) throw err;
-            console.log;
-            // Renderiza a pagina dashboard com a lista de usuarios coletada do BD pelo SELECT
-            res.render("pages/dashboard", {
-                titulo: "tabela de usuario",
-                dados: row,
-            });
-        });
-    } else {
-        res.send("Usuário não logado");
-    }
+  // res.render("pages/dashboard", {titulo: "Dashboard"});
+  console.log("GET /dashboard");
+});
+
+app.get("/logout", (req, res) => {
+  console.log("GET /logout");
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 });
 
 app.listen(PORT, () => {
-    console.log(`Servidor sendo executado na porta ${PORT}`);
-    console.log(__dirname + "\\static");
+  console.log(`Servidor sendo executado na porta ${PORT}`);
+});
+app.get("/static", (req, res) => {
+  res.send(`Você está na página static!`);
+  console.log("GET /static");
+  console.log(__dirname + "\\static");
+});
+
+app.post("/cadastro", (req, res) => {
+  console.log("/POST /cadastro");
+  console.log(JSON.stringify(req.body));
+  const { username, password } = req.body;
+
+  const query = "SELECT * FROM users WHERE username=?";
+
+  db.get(query, [username], (err, row) => {
+    if (err) throw err;
+
+    console.log("Query SELECT do cadastro:", JSON.stringify(row));
+    if (row) {
+      console.log(`Usuario: ${username} ja cadastrado.`);
+      res.redirect("/cadastro_existente");
+    } else {
+      const insert = "INSERT INTO users(username, password) VALUES (?,?)";
+      db.get(insert, [username, password], (err, row) => {
+        if (err) throw err;
+
+        console.log(`Usuario: ${username}  cadastrado com sucesso.`);
+        res.redirect("/sucesso");
+      });
+    }
+  });
+});
+
+app.post("/login", (req, res) => {
+  console.log("/POST /login");
+  console.log(JSON.stringify(req.body));
+  const { username, password } = req.body;
+  //res.render("./pages/dashboard");
+
+  const query = "SELECT * FROM users WHERE username=? AND password=?";
+  db.get(query, [username, password], (err, row) => {
+    if (err) throw err;
+
+    //1- Verificar se o usuario e a senha estao registrados nos no banco de dados;
+    console.log(JSON.stringify(row));
+
+    if (row) {
+      //2- Se o usuario cadastra e a senha e valida executa o login;
+      req.session.username = username;
+      req.session.loggedin = true;
+      res.redirect("/dashboard");
+    } else {
+      //3- Se nao, executa processo de negaçao de login.
+      res.redirect("/usuario_invalido");
+
+
+    }
+  });
+});
+
+app.use('/{*erro}', (req, res) => {
+  // Envia uma resposta de erro 404
+  res.status(404).render('pages/error_404', { titulo: "ERRO 404", req: req, msg: "404" });
+
 });
