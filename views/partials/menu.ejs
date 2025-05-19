@@ -1,11 +1,16 @@
 <header>
   <nav>
 
-    <a href="/sobre"><img src='/static/pomba_logo.png' /></a>
-    <a href="/cadastro"><img src='/static/pomba_logo.png' /></a>
-    <a href="/login"><img src='/static/pomba_logo.png' /></a>
-    <a href="/dashboard"><img src='/static/pomba_logo.png' /></a>
-    <a href="/logout"><img src='/static/pomba_logo.png' /></a>
+     <a href="/">Home</a>
+    <a href="/Sobre">Sobre</a>
+
+    <% if(!req.session.logedin) { %>
+    <a href="/Cadastro">Cadastro</a>
+    <a href="/Login">Login</a>
+    <% } else { %>
+    <a href="/Dashboard">Dashboard</a>
+    <a href="/Logout">logout</a>
+    <% } %>
 
   </nav>
 </header>
